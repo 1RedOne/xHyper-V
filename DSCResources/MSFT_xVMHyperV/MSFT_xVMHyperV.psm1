@@ -345,12 +345,13 @@ function Test-TargetResource
        Throw "More than one VM with the name $Name exist." 
     }
     
-    # Check if $VhdPath exist
-    if(!(Test-Path $VhdPath))
+    # Check if $VhdPath exist, or differencing disk exists
+    if(!(Test-Path $VhdPath) -or (!(Test-Path (Get-VM -name $Name).HardDrives.Path)) )
     {
+    
         Throw "$VhdPath does not exists"
     }
-
+    
     # Check if Minimum memory is less than StartUpmemory
     if($StartupMemory -and $MinimumMemory -and  ($MinimumMemory -gt $StartupMemory))
     {
